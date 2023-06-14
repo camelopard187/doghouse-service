@@ -1,5 +1,11 @@
 import { InternalServerErrorException } from '@nestjs/common'
-import { IsEnum, IsString, validateSync } from 'class-validator'
+import {
+  IsEnum,
+  IsInt,
+  IsPositive,
+  IsString,
+  validateSync
+} from 'class-validator'
 import { plainToInstance } from 'class-transformer'
 
 export enum NodeEnvironment {
@@ -12,6 +18,9 @@ export class Environment {
   @IsEnum(NodeEnvironment) NODE_ENV!: NodeEnvironment
 
   @IsString() DATABASE_URL!: string
+
+  @IsInt() @IsPositive() THROTTLE_TTL!: number
+  @IsInt() @IsPositive() THROTTLE_LIMIT!: number
 }
 
 export class InvalidEnvironmentException extends InternalServerErrorException {}
