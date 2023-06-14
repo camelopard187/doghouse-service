@@ -7,7 +7,9 @@
     "build": "nest build",
     "start:development": "nest start",
     "start:production": "node dist/main",
-    "test:integration": "jest integration"
+    "test:integration": "jest integration",
+    "migrate": "npx sequelize-cli db:migrate",
+    "seed": "npx sequelize-cli db:seed:all"
   },
   "dependencies": {
     "@nestjs/common": "^9.4.3",
