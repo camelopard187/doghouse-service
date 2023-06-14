@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import { SequelizeModule } from '@nestjs/sequelize'
 
+import { PingController } from '~/periphery/presentation/ping/ping.controller'
 import { SequelizeOptions } from '~/periphery/persistence/sequelize.options'
 import { validate } from '~/common/environment'
 
@@ -16,7 +17,7 @@ import { validate } from '~/common/environment'
       imports: [ConfigModule]
     })
   ],
-  controllers: [],
+  controllers: [PingController],
   providers: []
 })
 export class AppModule {}
