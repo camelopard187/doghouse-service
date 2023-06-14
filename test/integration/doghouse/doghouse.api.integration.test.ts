@@ -109,4 +109,67 @@ describe('DoghouseController (version 1) integration test', () => {
       })
     })
   })
+
+  describe('GET /v1/doghouse/list', () => {
+    it('should return OK and doghouses with correct properties', async () => {
+      const createDoghouseDto: DoghouseCreateDto = {
+        name: 'Furry Fortress',
+        color: 'Purple',
+        weight: 14,
+        tail: 1
+      }
+
+      await Doghouse.create({ ...createDoghouseDto })
+
+      const response = await request(app.getHttpServer())
+        .get('/v1/doghouse/list')
+        .query({ page: 1, limit: 9 })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toContainEqual({
+        ...createDoghouseDto,
+        createdAt: expect.any(String),
+        updatedAt: expect.any(String),
+        id: expect.any(Number)
+      })
+    })
+
+    it('should return OK and sorted doghouses with pagination', async () => {
+      const createDoghouseDtos: DoghouseCreateDto[] = [
+        { name: 'Woof retreat', color: 'Yellow', tail: 2, weight: 18 },
+        { name: 'Barkside villa', color: 'White', tail: 1, weight: 14 },
+        { name: 'Snuggle den', color: 'Pink', tail: 1, weight: 12 }
+      ]
+
+      await Doghouse.bulkCreate(createDoghouseDtos)
+
+      const response = await request(app.getHttpServer())
+        .get('/v1/doghouse/list')
+        .query({ page: 1, limit: 2, attribute: 'name', order: 'desc' })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.body).toHaveLength(2)
+      expect(response.body).toStrictEqual(
+        [...response.body].sort((a, b) => (a.name < b.name ? 1 : -1))
+      )
+    })
+
+    it('should return Bad Request for invalid request queries', async () => {
+      const response = await request(app.getHttpServer())
+        .get('/v1/doghouse/list')
+        .query({ page: -1, limit: 0, attribute: 'prop', order: 'up' })
+
+      expect(response.statusCode).toBe(400)
+      expect(response.body).toEqual({
+        statusCode: 400,
+        message: [
+          'page must be a positive number',
+          'limit must be a positive number',
+          'attribute is not a valid key of the Doghouse model',
+          'order must be one of the following values: asc, desc'
+        ],
+        error: 'Bad Request'
+      })
+    })
+  })
 })

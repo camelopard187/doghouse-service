@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
+  Query,
   UseFilters,
   ValidationPipe
 } from '@nestjs/common'
@@ -9,6 +11,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger'
 
 import { DoghouseService } from '~/application/doghouse/doghouse.service'
 import { DoghouseCreateDto } from '~/application/doghouse/doghouse-create.dto'
+import { DoghouseListDto } from '~/application/doghouse/doghouse-list.dto'
 import { SequelizeConnectionRefusedErrorFilter } from '~/periphery/presentation/common/sequelize-connection-refused-error.filter'
 import type { Doghouse } from '~/periphery/persistence/doghouse/doghouse.model'
 
@@ -17,6 +20,29 @@ import type { Doghouse } from '~/periphery/persistence/doghouse/doghouse.model'
 @UseFilters(SequelizeConnectionRefusedErrorFilter)
 export class DoghouseController {
   constructor(private readonly doghouseService: DoghouseService) {}
+
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved the list of doghouses'
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'The request contains invalid query parameters'
+  })
+  @Get('list')
+  async list(
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: {
+          enableImplicitConversion: true
+        }
+      })
+    )
+    query: DoghouseListDto
+  ): Promise<Doghouse[]> {
+    return this.doghouseService.findAll(query)
+  }
 
   @ApiResponse({
     status: 201,
