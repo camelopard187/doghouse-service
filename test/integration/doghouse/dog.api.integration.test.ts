@@ -2,11 +2,9 @@ import request from 'supertest'
 import { VersioningType } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import { SequelizeModule } from '@nestjs/sequelize'
-import { Sequelize } from 'sequelize-typescript'
 import { PostgreSqlContainer } from 'testcontainers'
 import type { INestApplication } from '@nestjs/common'
 
-import { umzug } from '~/../test/common/umzug'
 import { Dog } from '~/periphery/persistence/dog/dog.model'
 import { DogModule } from '~/periphery/dog.module'
 import type { DogCreateDto } from '~/application/dog/dog-create.dto'
@@ -21,13 +19,13 @@ describe('DogController (version 2) integration test', () => {
       imports: [
         SequelizeModule.forRoot({
           uri: container.getConnectionUri(),
+          autoLoadModels: true,
           models: [Dog]
         }),
         DogModule
       ]
     }).compile()
 
-    await umzug(module.get(Sequelize)).up()
     app = await module
       .createNestApplication()
       .enableVersioning({ type: VersioningType.URI })
