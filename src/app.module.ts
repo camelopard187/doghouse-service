@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { SequelizeModule } from '@nestjs/sequelize'
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 
-import { DoghouseModule } from '~/periphery/doghouse.module'
+import { DogModule } from '~/periphery/dog.module'
 import { PingController } from '~/periphery/presentation/ping/ping.controller'
 import { TimeoutInterceptor } from '~/periphery/presentation/common/timeout.interceptor'
 import { ThrottlerOptions } from '~/periphery/presentation/throttler.options'
@@ -24,7 +24,7 @@ import { validate } from '~/common/environment'
       useClass: ThrottlerOptions,
       imports: [ConfigModule]
     }),
-    DoghouseModule
+    DogModule
   ],
   controllers: [PingController],
   providers: [
