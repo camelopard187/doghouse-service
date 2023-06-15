@@ -1,6 +1,6 @@
 # 🐶 Doghouse Service
 
-Welcome to the Doghouse Service! Our microservice makes use of Nest.js and Sequelize to provide an API for managing data related to doghouses. You can store and retrieve information about doghouses with ease, all while ensuring security and reliability
+The Doghouse service is a user-friendly REST API that enables users to create and view doghouses effortlessly. Users can create a new doghouse by providing basic information like size and color, and the service allows users to view all existing doghouses on a list. The service is straightforward to use and provides a convenient way to manage and view doghouses
 
 ## 🐕‍🦺 Getting Started
 
@@ -39,7 +39,7 @@ $ pnpm migrate --url $DATABASE_URL
 
 > **Warning** If `$DATABASE_URL` is empty then try to paste variable manualy
 
-4. Finally, start the Nest.js server by entering the following command:
+4. Finally, start the [Nest.js](https://nestjs.com/) server by entering the following command:
 
 ```bash
 $ pnpm start:development
