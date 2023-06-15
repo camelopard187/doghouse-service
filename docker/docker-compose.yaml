@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:15.2-alpine3.17
+    ports:
+      - 5432:5432
+    env_file:
+      - ../.env
+    restart: on-failure
+  application:
+    build:
+      context: ../
+      dockerfile: docker/build/application.dockerfile
+    ports:
+      - 3000:3000
+    env_file:
+      - ../.env
+    depends_on:
+      - postgres
+    restart: on-failure

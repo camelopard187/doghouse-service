@@ -15,6 +15,7 @@ export class SequelizeOptions implements SequelizeOptionsFactory {
   createSequelizeOptions(): SequelizeModuleOptions {
     return {
       uri: this.configService.get<string>('DATABASE_URL'),
+      autoLoadModels: true,
       models: [Dog]
     }
   }
