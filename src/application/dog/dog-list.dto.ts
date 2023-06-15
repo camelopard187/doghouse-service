@@ -2,15 +2,15 @@ import { ApiProperty } from '@nestjs/swagger'
 import { IsEnum, IsInt, IsPositive } from 'class-validator'
 
 import { IsModelKey } from '~/common/is-model-key.decorator'
-import { Doghouse } from '~/periphery/persistence/doghouse/doghouse.model'
-import type { DoghouseAttributes } from '~/periphery/persistence/doghouse/doghouse.model'
+import { Dog } from '~/periphery/persistence/dog/dog.model'
+import type { DogAttributes } from '~/periphery/persistence/dog/dog.model'
 
 export enum Order {
   Asc = 'asc',
   Desc = 'desc'
 }
 
-export class DoghouseListDto {
+export class DogListDto {
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @IsInt()
   @IsPositive()
@@ -25,24 +25,24 @@ export class DoghouseListDto {
   @IsInt()
   @IsPositive()
   @ApiProperty({
-    description: 'The maximum number of doghouses to return per page',
+    description: 'The maximum number of dogs to return per page',
     example: 5,
     default: 5
   })
   limit: number = 5
 
-  @IsModelKey(Doghouse)
+  @IsModelKey(Dog)
   @ApiProperty({
-    description: 'The attribute to use for sorting the doghouses',
+    description: 'The attribute to use for sorting the dogs',
     type: 'string',
     example: 'id',
     default: 'id'
   })
-  attribute: keyof DoghouseAttributes = 'id'
+  attribute: keyof DogAttributes = 'id'
 
   @IsEnum(Order)
   @ApiProperty({
-    description: 'The order in which the doghouses should be sorted',
+    description: 'The order in which the dogs should be sorted',
     enum: Order,
     example: Order.Asc,
     default: Order.Asc

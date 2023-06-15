@@ -4,7 +4,7 @@ import { ApiResponse, ApiTags } from '@nestjs/swagger'
 import { name, version } from '~/../package.json'
 
 @ApiTags('ping')
-@Controller({ version: '1', path: 'ping' })
+@Controller({ version: '2', path: 'ping' })
 export class PingController {
   @Get()
   @ApiResponse({

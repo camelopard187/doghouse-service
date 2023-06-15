@@ -1,6 +1,6 @@
 # 🐶 Doghouse Service
 
-The Doghouse service is a user-friendly REST API that enables users to create and view doghouses effortlessly. Users can create a new doghouse by providing basic information like size and color, and the service allows users to view all existing doghouses on a list. The service is straightforward to use and provides a convenient way to manage and view doghouses
+The Doghouse service is a user-friendly REST API that enables users to create and view dogs effortlessly. Users can create a new dog by providing basic information like weight and color, and the service allows users to view all existing dogs on a list. The service is straightforward to use and provides a convenient way to manage and view dogs
 
 ## 🐕‍🦺 Getting Started
 
