@@ -1,17 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { IsString, IsPositive, IsNumber, IsNotEmpty } from 'class-validator'
 
-export class DoghouseCreateDto {
+export class DogCreateDto {
   @ApiProperty({
-    description: 'The name of the doghouse',
-    example: 'Bark Bungalow'
+    description: 'The name of the dog',
+    example: 'Oliver'
   })
   @IsString()
   @IsNotEmpty()
   name!: string
 
   @ApiProperty({
-    description: 'The color of the doghouse',
+    description: 'The color of the dog',
     example: 'Green'
   })
   @IsString()
@@ -27,7 +27,7 @@ export class DoghouseCreateDto {
   tail!: number
 
   @ApiProperty({
-    description: 'The weight of the doghouse',
+    description: 'The weight of the dog',
     example: 10
   })
   @IsNumber()

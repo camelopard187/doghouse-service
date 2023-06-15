@@ -13,10 +13,10 @@ async function bootstrap() {
     .setTitle('Doghouse API')
     .setDescription(
       `This API provides endpoints for managing a doghouse application.
-      It allows users to perform various operations related to doghouses`
+      It allows users to perform various operations related to dogs`
     )
     .setVersion(version)
-    .addTag('doghouse')
+    .addTag('dog')
     .addTag('ping')
     .build()
 

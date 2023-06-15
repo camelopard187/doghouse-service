@@ -7,11 +7,11 @@ import { PostgreSqlContainer } from 'testcontainers'
 import type { INestApplication } from '@nestjs/common'
 
 import { umzug } from '~/../test/common/umzug'
-import { Doghouse } from '~/periphery/persistence/doghouse/doghouse.model'
-import { DoghouseModule } from '~/periphery/doghouse.module'
-import type { DoghouseCreateDto } from '~/application/doghouse/doghouse-create.dto'
+import { Dog } from '~/periphery/persistence/dog/dog.model'
+import { DogModule } from '~/periphery/dog.module'
+import type { DogCreateDto } from '~/application/dog/dog-create.dto'
 
-describe('DoghouseController (version 1) integration test', () => {
+describe('DogController (version 2) integration test', () => {
   let app: INestApplication
 
   beforeAll(async () => {
@@ -21,9 +21,9 @@ describe('DoghouseController (version 1) integration test', () => {
       imports: [
         SequelizeModule.forRoot({
           uri: container.getConnectionUri(),
-          models: [Doghouse]
+          models: [Dog]
         }),
-        DoghouseModule
+        DogModule
       ]
     }).compile()
 
@@ -36,56 +36,56 @@ describe('DoghouseController (version 1) integration test', () => {
 
   afterAll(async () => app.close())
 
-  describe('POST /v1/doghouse/create', () => {
-    it('should return Created for a newly created doghouse', async () => {
-      const createDoghouseDto: DoghouseCreateDto = {
-        name: 'Woof Manor',
+  describe('POST /v2/dog/create', () => {
+    it('should return Created for a newly created dog', async () => {
+      const createDogDto: DogCreateDto = {
+        name: 'Charlie',
         color: 'Brown',
         weight: 12,
         tail: 1
       }
 
       const response = await request(app.getHttpServer())
-        .post('/v1/doghouse/create')
-        .send(createDoghouseDto)
+        .post('/v2/dog/create')
+        .send(createDogDto)
 
-      const createdDoghouse = await Doghouse.findOne({
-        where: { name: createDoghouseDto.name }
+      const createdDog = await Dog.findOne({
+        where: { name: createDogDto.name }
       })
 
       expect(response.statusCode).toBe(201)
       expect(response.body).toEqual({
-        ...createdDoghouse?.get(),
+        ...createdDog?.get(),
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         id: expect.any(Number)
       })
     })
 
-    it('should return Bad Request for a duplicate doghouse', async () => {
-      const createDoghouseDto: DoghouseCreateDto = {
-        name: 'Puppy Paradise',
+    it('should return Bad Request for a duplicate dog', async () => {
+      const createDogDto: DogCreateDto = {
+        name: 'Buddy',
         color: 'Pink',
         weight: 22,
         tail: 2
       }
 
-      await Doghouse.create({ ...createDoghouseDto })
+      await Dog.create({ ...createDogDto })
 
       const response = await request(app.getHttpServer())
-        .post('/v1/doghouse/create')
-        .send(createDoghouseDto)
+        .post('/v2/dog/create')
+        .send(createDogDto)
 
       expect(response.statusCode).toBe(400)
       expect(response.body).toEqual({
         statusCode: 400,
-        message: 'A doghouse with the same name already exists',
+        message: 'The dog with the same name already exists',
         error: 'Bad Request'
       })
     })
 
-    it('should return Bad Request for invalid doghouse data', async () => {
-      const createDoghouseDto: DoghouseCreateDto = {
+    it('should return Bad Request for invalid dog data', async () => {
+      const createDogDto: DogCreateDto = {
         name: '',
         color: '',
         weight: 0,
@@ -93,8 +93,8 @@ describe('DoghouseController (version 1) integration test', () => {
       }
 
       const response = await request(app.getHttpServer())
-        .post('/v1/doghouse/create')
-        .send(createDoghouseDto)
+        .post('/v2/dog/create')
+        .send(createDogDto)
 
       expect(response.statusCode).toBe(400)
       expect(response.body).toEqual({
@@ -110,41 +110,41 @@ describe('DoghouseController (version 1) integration test', () => {
     })
   })
 
-  describe('GET /v1/doghouse/list', () => {
-    it('should return OK and doghouses with correct properties', async () => {
-      const createDoghouseDto: DoghouseCreateDto = {
-        name: 'Furry Fortress',
+  describe('GET /v2/dog/list', () => {
+    it('should return OK and dogs with correct properties', async () => {
+      const createDogDto: DogCreateDto = {
+        name: 'Maggie',
         color: 'Purple',
         weight: 14,
         tail: 1
       }
 
-      await Doghouse.create({ ...createDoghouseDto })
+      await Dog.create({ ...createDogDto })
 
       const response = await request(app.getHttpServer())
-        .get('/v1/doghouse/list')
+        .get('/v2/dog/list')
         .query({ page: 1, limit: 9 })
 
       expect(response.statusCode).toBe(200)
       expect(response.body).toContainEqual({
-        ...createDoghouseDto,
+        ...createDogDto,
         createdAt: expect.any(String),
         updatedAt: expect.any(String),
         id: expect.any(Number)
       })
     })
 
-    it('should return OK and sorted doghouses with pagination', async () => {
-      const createDoghouseDtos: DoghouseCreateDto[] = [
-        { name: 'Woof retreat', color: 'Yellow', tail: 2, weight: 18 },
-        { name: 'Barkside villa', color: 'White', tail: 1, weight: 14 },
-        { name: 'Snuggle den', color: 'Pink', tail: 1, weight: 12 }
+    it('should return OK and sorted dogs with pagination', async () => {
+      const createDogDtos: DogCreateDto[] = [
+        { name: 'Bailey', color: 'Yellow', tail: 2, weight: 18 },
+        { name: 'Sadie', color: 'White', tail: 1, weight: 14 },
+        { name: 'Lily', color: 'Pink', tail: 1, weight: 12 }
       ]
 
-      await Doghouse.bulkCreate(createDoghouseDtos)
+      await Dog.bulkCreate(createDogDtos)
 
       const response = await request(app.getHttpServer())
-        .get('/v1/doghouse/list')
+        .get('/v2/dog/list')
         .query({ page: 1, limit: 2, attribute: 'name', order: 'desc' })
 
       expect(response.statusCode).toBe(200)
@@ -156,7 +156,7 @@ describe('DoghouseController (version 1) integration test', () => {
 
     it('should return Bad Request for invalid request queries', async () => {
       const response = await request(app.getHttpServer())
-        .get('/v1/doghouse/list')
+        .get('/v2/dog/list')
         .query({ page: -1, limit: 0, attribute: 'prop', order: 'up' })
 
       expect(response.statusCode).toBe(400)
@@ -165,7 +165,7 @@ describe('DoghouseController (version 1) integration test', () => {
         message: [
           'page must be a positive number',
           'limit must be a positive number',
-          'attribute is not a valid key of the Doghouse model',
+          'attribute is not a valid key of the Dog model',
           'order must be one of the following values: asc, desc'
         ],
         error: 'Bad Request'

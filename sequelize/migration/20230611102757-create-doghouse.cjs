@@ -3,7 +3,7 @@ const { STRING, INTEGER, DATE, fn } = require('sequelize')
 
 module.exports = {
   up: async query => {
-    await query.createTable('Doghouses', {
+    await query.createTable('Dogs', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -22,6 +22,6 @@ module.exports = {
   },
 
   down: async query => {
-    await query.dropTable('Doghouses')
+    await query.dropTable('Dogs')
   }
 }

@@ -5,7 +5,7 @@ import type {
   SequelizeOptionsFactory
 } from '@nestjs/sequelize'
 
-import { Doghouse } from '~/periphery/persistence/doghouse/doghouse.model'
+import { Dog } from '~/periphery/persistence/dog/dog.model'
 import type { Environment } from '~/common/environment'
 
 @Injectable()
@@ -15,7 +15,7 @@ export class SequelizeOptions implements SequelizeOptionsFactory {
   createSequelizeOptions(): SequelizeModuleOptions {
     return {
       uri: this.configService.get<string>('DATABASE_URL'),
-      models: [Doghouse]
+      models: [Dog]
     }
   }
 }
